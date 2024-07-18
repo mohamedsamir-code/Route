@@ -7,8 +7,9 @@ import 'package:route/ui/util/app_routes.dart';
 import 'package:route/ui/util/app_theme.dart';
 import 'package:route/ui/util/cache_helper.dart';
 
-void main()async {
+Future<void> main()async {
   WidgetsFlutterBinding.ensureInitialized();
+  ScreenUtil.ensureScreenSize();
   initServiceLocator();
   await sl<CacheHelper>().init();
   runApp(BlocProvider(
@@ -27,12 +28,15 @@ class MyApp extends StatelessWidget {
       designSize: const Size(430, 932),
       minTextAdapt: true,
       splitScreenMode: true,
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: getAppTheme(),
-        initialRoute: Routes.intitlRoute,
-        onGenerateRoute: AppRoutes.generateRoute,
-      ),
+      builder: (context,child) {
+        ScreenUtil.init(context);
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: getAppTheme(),
+          initialRoute: Routes.intitlRoute,
+          onGenerateRoute: AppRoutes.generateRoute,
+        );
+      }
     );
   }
 }
